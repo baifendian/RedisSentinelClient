@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<project default="jar" basedir="." name="jnikvdb">  
+    <property name="lib.dir" value="${basedir}/lib"/>  
+    <property name="src.dir" value="${basedir}/src"/>  
+    <property name="classes.dir" value="${basedir}/src"/>  
+  
+    <property name="output.dir" value="${basedir}"/>  
+    <property name="jarname" value="kvdbtest.jar"/>  
+	
+    <path id="lib-classpath">  
+        <fileset dir="${lib.dir}">  
+            <include name="*.so"/>  
+        </fileset>  
+    </path>
+
+    <target name="init">  
+        <mkdir dir="${classes.dir}"/>  
+        <mkdir dir="${output.dir}"/>  
+    </target>
+        	
+    <target name="compile" depends="init">  
+        <javac srcdir="${src.dir}" destdir="${classes.dir}">  
+            <compilerarg line="-encoding UTF-8"/>  
+        </javac>  
+    </target>  
+  
+    <!-- 3. 打包jar文件 -->  
+    <target name="jar" depends="compile">  
+        <copy todir="${output.dir}/lib">  
+            <fileset dir="${lib.dir}">
+			<include name="*.so"/>
+		</fileset>  
+        </copy>  
+    	
+    	<!--Create a property containing all .jar files,  
+        	        prefix lib/, and seperated with a space-->  
+            <pathconvert property="mf.classpath" pathsep=" ">  
+                <mapper>  
+                    <chainedmapper>  
+                        <flattenmapper/>  
+                        <globmapper from="*" to="*"/>  
+                    </chainedmapper>  
+                </mapper>  
+                <path refid="lib-classpath"/>  
+             </pathconvert>  
+
+  
+        <!-- jar文件的输出路-->  
+        <jar destfile="${output.dir}/${jarname}" basedir="${classes.dir}">
+        	<fileset dir="${lib.dir}" includes="*.so"/>
+            <manifest>  
+            	<attribute name="Main-Class" value="test.RedisClientTest"/>
+                <attribute name="Class-Path" value="${mf.classpath}"/>  
+            </manifest>  
+        </jar>  
+    </target>  
+</project>  
