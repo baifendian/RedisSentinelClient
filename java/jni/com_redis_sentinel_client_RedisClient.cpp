@@ -434,7 +434,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_redis_sentinel_client_RedisClient_cgetByte
 
 	env->SetByteArrayRegion(jarrRV, 0,value.size(), jby);
 
-	env->ReleaseByteArrayElements(jkey, (jbyte*)ckey, len);
+	env->ReleaseByteArrayElements(jkey, (jbyte*)ckey, 0);
 
 	return jarrRV;
 }
@@ -456,8 +456,8 @@ JNIEXPORT jboolean JNICALL Java_com_redis_sentinel_client_RedisClient_csetBytes
 	string strkey(ckey, keylen);
 	string strvalue(cvalue, valuelen);
 
-	env->ReleaseByteArrayElements(jkey, (jbyte*)ckey, keylen);
-	env->ReleaseByteArrayElements(jvalue, (jbyte*)cvalue, valuelen);
+	env->ReleaseByteArrayElements(jkey, (jbyte*)ckey, 0);
+	env->ReleaseByteArrayElements(jvalue, (jbyte*)cvalue, 0);
 
 	return client->set(strkey, strvalue);
 }
@@ -497,7 +497,7 @@ JNIEXPORT jobject JNICALL Java_com_redis_sentinel_client_RedisClient_clrange___3
 	int start = jstart;
 	int end = jend;
 
-	env->ReleaseByteArrayElements(jkey, (jbyte*)ckey, keylen);
+	env->ReleaseByteArrayElements(jkey, (jbyte*)ckey, 0);
 
 	vector<string> values = client->lrange(strkey, start, end);
 
