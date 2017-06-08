@@ -53,6 +53,17 @@ public:
 		return m_Servers;
 	}
 	;
+        RedisClientPool*  GetFirstMasterPool()
+	{
+	       ScopedLock lock(m_Mutex);
+              map<string, RedisClientPool*>::iterator it =m_Servers.begin();
+              if(it != redis_map.end())
+              {
+                   RedisClientPool* pool = it->second;
+                   return pool;
+              }
+		return NULL;
+	};
 	void UpdateServers(const string& master_name, const string& addr);
 
 	bool CheckNewServer(const string& masterName);
