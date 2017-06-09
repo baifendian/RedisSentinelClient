@@ -22,7 +22,8 @@ CXX_OBJS = $(OBJ_DIR)/RedisClient.o \
 			$(OBJ_DIR)/KetamaHasher.o \
 			$(OBJ_DIR)/ae.o \
 			$(OBJ_DIR)/zmalloc.o \
-			$(OBJ_DIR)/Command.o
+			$(OBJ_DIR)/Command.o \
+			$(OBJ_DIR)/RedisAddrInfo.o
 			
 $(OBJ_DIR)/%.o:$(SRC_DIR)/%.cpp
 	$(CXX) -c -fPIC -o $@ $< $(INCPATH) $(LFLAGS)
