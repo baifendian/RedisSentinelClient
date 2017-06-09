@@ -16,7 +16,7 @@
 
 #include "RedisClientPool.h"
 #include "KetamaHasher.h"
-
+#include "ScopedLock.h"
 #include "hiredis.h"
 #include "hiredis_ae.h"
 #include "async.h"
@@ -53,6 +53,17 @@ public:
 		return m_Servers;
 	}
 	;
+        RedisClientPool*  GetFirstMasterPool()
+	{
+	       ScopedLock lock(m_Mutex);
+              map<string, RedisClientPool*>::iterator it =m_Servers.begin();
+              if(it != m_Servers.end())
+              {
+                   RedisClientPool* pool = it->second;
+                   return pool;
+              }
+		return NULL;
+	};
 	void UpdateServers(const string& master_name, const string& addr);
 
 	bool CheckNewServer(const string& masterName);
